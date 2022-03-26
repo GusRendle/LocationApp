@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LocationApp</string>
+    <string name="add_a_location">Add a Location</string>
 </resources>
