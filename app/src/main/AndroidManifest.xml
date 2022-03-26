@@ -9,9 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationApp">
+
         <activity
             android:name=".AddLocationActivity"
-            android:exported="false" />
+            android:label="Add Location"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/CustomNoActionBarTheme"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
