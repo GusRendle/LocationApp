@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/drawable/ic_action_add_24dp.xml" value="0.486" />
+        <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.486" />
+        <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/drawable/shape_button_rounded.xml" value="0.486" />
+        <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/drawable/shape_image_view_border.xml" value="0.486" />
         <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/layout/activity_add_location.xml" value="0.31354166666666666" />
         <entry key="..\:/Programs/Android/AndroidStudioProjects/LocationApp/app/src/main/res/layout/activity_main.xml" value="0.5541666666666667" />
       </map>

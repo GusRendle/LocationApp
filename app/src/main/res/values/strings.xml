@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">LocationApp</string>
-    <string name="add_a_location">Add a Location</string>
+    <string name="add_location_tooltip">Add a Location</string>
+    <string name="add_location_title_hint">Name</string>
+    <string name="add_location_desc_hint">Description</string>
+    <string name="add_location_location_hint">Location</string>
+    <string name="add_location_select_current_location_button">SELECT CURRENT LOCATION</string>
+    <string name="add_location_image_button">ADD IMAGE</string>
+    <string name="add_location_save_button">SAVE</string>
 </resources>
