@@ -94,18 +94,17 @@
                     android:textSize="@dimen/edit_text_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <Button
                 android:id="@+id/tv_select_current_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/shape_image_view_border"
-                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_button_rounded"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/add_location_select_current_location_button"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/til_location" />
@@ -142,6 +141,7 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_add_image"
                 app:layout_constraintTop_toBottomOf="@+id/tv_select_current_location"
                 app:layout_constraintVertical_bias="0.019" />
+
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
@@ -160,4 +160,52 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_add_image" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="209dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left" />
 </androidx.constraintlayout.widget.ConstraintLayout>
