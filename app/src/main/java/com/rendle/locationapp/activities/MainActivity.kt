@@ -1,8 +1,9 @@
-package com.rendle.locationapp
+package com.rendle.locationapp.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.rendle.locationapp.AddLocationActivity
 import com.rendle.locationapp.databinding.ActivityMainBinding
 
 //Uses a Data Binding to refer to objects by their XML IDs
