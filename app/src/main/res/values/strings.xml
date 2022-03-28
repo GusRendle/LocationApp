@@ -7,4 +7,5 @@
     <string name="add_location_select_current_location_button">SELECT CURRENT LOCATION</string>
     <string name="add_location_image_button">ADD IMAGE</string>
     <string name="add_location_save_button">SAVE</string>
+    <string name="no_locations_found">No locations found. Please add one.</string>
 </resources>
