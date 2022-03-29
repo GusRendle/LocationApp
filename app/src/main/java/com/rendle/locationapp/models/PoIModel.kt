@@ -17,5 +17,14 @@ class PoIModel(val name: String, val description: String) {
             }
             return locations
         }
+
+        fun createLocationList2(): ArrayList<PoIModel> {
+            val locations = ArrayList<PoIModel>()
+            locations.add(PoIModel("Bay", "It's wet"))
+            locations.add(PoIModel("Castle", "It's old"))
+            locations.add(PoIModel("Mitch", "It's drunk"))
+            locations.add(PoIModel("Homeless Guy", "It's dead"))
+            return locations
+        }
     }
 }
