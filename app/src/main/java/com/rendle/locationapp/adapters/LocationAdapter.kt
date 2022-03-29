@@ -1,5 +1,6 @@
 package com.rendle.locationapp.adapters
 
+import android.annotation.SuppressLint
 import com.rendle.locationapp.R
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rendle.locationapp.models.PoIModel
 
 
-class LocationAdapter (private val poiList: List<PoIModel>) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
+class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
+
+    private var poiList = mutableListOf<PoIModel>() + poiList
 
     //Provides access for the views in each list object
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,5 +45,15 @@ class LocationAdapter (private val poiList: List<PoIModel>) : RecyclerView.Adapt
     // Returns the number of items in the list
     override fun getItemCount(): Int {
         return poiList.size
+    }
+
+    /**
+     * Updates recycler view with a list
+     * @param list to send to recycler view
+     */
+    @SuppressLint("NotifyDataSetChanged")
+    fun addList(list: List<PoIModel>) {
+        poiList = list
+        notifyDataSetChanged()
     }
 }

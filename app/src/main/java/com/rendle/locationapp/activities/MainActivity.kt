@@ -12,14 +12,16 @@ import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityMainBinding
 import com.rendle.locationapp.models.PoIModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 //Uses a Data Binding to refer to objects by their XML IDs
 private lateinit var binding: ActivityMainBinding
-//Creates a list of PoIs
-lateinit var fullPoiList: ArrayList<PoIModel>
-val tempPoiList = mutableListOf<PoIModel>()
+//List of all PoIs
+var fullPoiList = listOf<PoIModel>()
+//Mutable list to search PoIs
+var tempPoiList = mutableListOf<PoIModel>()
+//RecyclerView adapter
+lateinit var rvAdapter: LocationAdapter
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,15 +36,19 @@ class MainActivity : AppCompatActivity() {
         fullPoiList = PoIModel.createLocationList2()
         tempPoiList.addAll(fullPoiList)
 
+        //Initialises adapter with new list
+        rvAdapter = LocationAdapter(fullPoiList)
+        //Gets Recycler view from XML
         val rvLocations = binding.rvLocationsList
-        //Sends list to rv Adapter
-        rvLocations.adapter = LocationAdapter(fullPoiList)
-        // Sets the RecyclerView's layoutManager to the created layout
+        //Sends initialised adapter to rv
+        rvLocations.adapter = rvAdapter
+        //Sets the RecyclerView's layoutManager to the created layout
         rvLocations.layoutManager = LinearLayoutManager(this)
 
         //Sets the Tool Bar as a Support Action Bar
         setSupportActionBar(binding.toolbarMain)
 
+        //Add back button
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         //Open AddLocationActivity when fab is pressed
@@ -83,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                     tempPoiList.addAll(fullPoiList)
                 }
                 //Update the Recycler View
-                binding.rvLocationsList.adapter = LocationAdapter(tempPoiList)
+                rvAdapter.addList(tempPoiList)
 
                 return false
             }
