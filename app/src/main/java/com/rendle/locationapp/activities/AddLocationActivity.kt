@@ -1,4 +1,4 @@
-package com.rendle.locationapp
+package com.rendle.locationapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

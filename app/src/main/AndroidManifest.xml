@@ -11,12 +11,12 @@
         android:theme="@style/Theme.LocationApp">
 
         <activity
-            android:name=".AddLocationActivity"
+            android:name=".activities.AddLocationActivity"
             android:label="Add Location"
             android:screenOrientation="fullSensor" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
