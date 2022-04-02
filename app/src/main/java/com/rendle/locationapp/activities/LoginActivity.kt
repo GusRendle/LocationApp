@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        //Login Button
         b.btnLogin.setOnClickListener {
             //Get email and password strings
             val email: String = b.etEmail.text.toString()
@@ -41,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                        //Ensures user can't navigate back to login page
                         finish()
                     } else {
                         Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show()
@@ -49,15 +51,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-//        signupBtn.setOnClickListener{
-//            val intent = Intent(this, SignUpActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//
-//        resetPasswordTv.setOnClickListener{
-//            val intent = Intent(this, ForgotPasswordActivity::class.java)
-//            startActivity(intent)
-//        }
+        b.tvClickRegister.setOnClickListener{
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+        b.tvResetPassword.setOnClickListener{
+            val intent = Intent(this, ResetPasswordActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

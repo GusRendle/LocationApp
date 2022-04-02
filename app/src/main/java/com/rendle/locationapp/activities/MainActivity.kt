@@ -1,12 +1,12 @@
 package com.rendle.locationapp.activities
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.rendle.locationapp.R
 import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityMainBinding
@@ -14,23 +14,34 @@ import com.rendle.locationapp.models.PoIModel
 import java.util.*
 
 
-//Uses a Data Binding to refer to objects by their XML IDs
-private lateinit var binding: ActivityMainBinding
+//Uses a Data Binding (b) to refer to objects by their XML IDs
+private lateinit var b: ActivityMainBinding
 //List of all PoIs
-var fullPoiList = listOf<PoIModel>()
+private var fullPoiList = listOf<PoIModel>()
 //Mutable list to search PoIs
-var tempPoiList = mutableListOf<PoIModel>()
+private var tempPoiList = mutableListOf<PoIModel>()
 //RecyclerView adapter
-lateinit var rvAdapter: LocationAdapter
+private lateinit var rvAdapter: LocationAdapter
+
+private lateinit var auth: FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //Calls parent constructor
         super.onCreate(savedInstanceState)
         //Creates objects from XML file
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        b = ActivityMainBinding.inflate(layoutInflater)
         //Sets XML view of this class
-        setContentView(binding.root)
+        setContentView(b.root)
+
+        auth = FirebaseAuth.getInstance()
+
+        //Redirects user to login activity if not logged in
+        if(auth.currentUser == null){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         //Generates 20 PoIs
         fullPoiList = PoIModel.createLocationList2()
@@ -39,20 +50,20 @@ class MainActivity : AppCompatActivity() {
         //Initialises adapter with new list
         rvAdapter = LocationAdapter(fullPoiList)
         //Gets Recycler view from XML
-        val rvLocations = binding.rvLocationsList
+        val rvLocations = b.rvLocationsList
         //Sends initialised adapter to rv
         rvLocations.adapter = rvAdapter
         //Sets the RecyclerView's layoutManager to the created layout
         rvLocations.layoutManager = LinearLayoutManager(this)
 
         //Sets the Tool Bar as a Support Action Bar
-        setSupportActionBar(binding.toolbarMain)
+        setSupportActionBar(b.toolbarMain)
 
         //Add back button
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         //Open AddLocationActivity when fab is pressed
-        binding.fabAddLocation.setOnClickListener {
+        b.fabAddLocation.setOnClickListener {
             val intent = Intent(this, AddLocationActivity::class.java)
             startActivity(intent)
         }

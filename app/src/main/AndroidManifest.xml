@@ -16,6 +16,21 @@
             android:screenOrientation="fullSensor" />
 
         <activity
+            android:name=".activities.LoginActivity"
+            android:label="Log In"
+            android:screenOrientation="fullSensor" />
+
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="Log In"
+            android:screenOrientation="fullSensor" />
+
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:label="Log In"
+            android:screenOrientation="fullSensor" />
+
+        <activity
             android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
