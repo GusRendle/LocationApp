@@ -24,5 +24,6 @@
     <string name="login_bg_content_description">Worcester Cathedral Background Image</string>
     <string name="text_reset_password">Reset Password</string>
     <string name="return_to_login">Return to Login Page</string>
+    <string name="nav_bar_sign_out">Sign Out</string>
 
 </resources>

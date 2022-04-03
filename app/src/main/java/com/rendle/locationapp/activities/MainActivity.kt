@@ -49,20 +49,32 @@ class MainActivity : AppCompatActivity() {
         //Toggle is ready
         toggle.syncState()
 
+        auth = FirebaseAuth.getInstance()
+
+        //Intent for the login activity
+        val loginIntent = Intent(this, LoginActivity::class.java)
+
         //Handles clicks on nav drawer icons
         b.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.item1 -> Toast.makeText(applicationContext, "item 1", Toast.LENGTH_LONG).show()
+                R.id.item1 -> Toast.makeText(applicationContext, "Item 1", Toast.LENGTH_LONG).show()
+                R.id.item_sign_out -> {
+                    auth.signOut()
+                    startActivity(loginIntent)
+                    finish()
+                }
+            }
+            //If user signed out, redirect to login page
+            if(auth.currentUser == null){
+                startActivity(loginIntent)
+                finish()
             }
             true
         }
 
-        auth = FirebaseAuth.getInstance()
-
         //Redirects user to login activity if not logged in
         if(auth.currentUser == null){
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(loginIntent)
             finish()
         }
 
