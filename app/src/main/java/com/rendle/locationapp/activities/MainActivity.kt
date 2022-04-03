@@ -3,6 +3,9 @@ package com.rendle.locationapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +19,8 @@ import java.util.*
 
 //Uses a Data Binding (b) to refer to objects by their XML IDs
 private lateinit var b: ActivityMainBinding
+//Refers to nav drawer toggle in the activity's action bar
+lateinit var toggle: ActionBarDrawerToggle
 //List of all PoIs
 private var fullPoiList = listOf<PoIModel>()
 //Mutable list to search PoIs
@@ -33,6 +38,24 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         //Sets XML view of this class
         setContentView(b.root)
+
+        //Sets the Tool Bar as a Support Action Bar
+        setSupportActionBar(b.toolbarMain)
+        //Adds support for back button in search and hamburger menu button
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //Creates hamburger menu button, links it to nav drawer
+        toggle = ActionBarDrawerToggle(this, b.drawerLayout, R.string.open_text, R.string.close_text)
+        b.drawerLayout.addDrawerListener(toggle)
+        //Toggle is ready
+        toggle.syncState()
+
+        //Handles clicks on nav drawer icons
+        b.navView.setNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.item1 -> Toast.makeText(applicationContext, "item 1", Toast.LENGTH_LONG).show()
+            }
+            true
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -56,17 +79,21 @@ class MainActivity : AppCompatActivity() {
         //Sets the RecyclerView's layoutManager to the created layout
         rvLocations.layoutManager = LinearLayoutManager(this)
 
-        //Sets the Tool Bar as a Support Action Bar
-        setSupportActionBar(b.toolbarMain)
 
-        //Add back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         //Open AddLocationActivity when fab is pressed
         b.fabAddLocation.setOnClickListener {
             val intent = Intent(this, AddLocationActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    //Adds on click functionality to nav drawer items
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
