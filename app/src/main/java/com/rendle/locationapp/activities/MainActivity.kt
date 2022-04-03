@@ -20,7 +20,7 @@ import java.util.*
 //Uses a Data Binding (b) to refer to objects by their XML IDs
 private lateinit var b: ActivityMainBinding
 //Refers to nav drawer toggle in the activity's action bar
-lateinit var toggle: ActionBarDrawerToggle
+private lateinit var toggle: ActionBarDrawerToggle
 //List of all PoIs
 private var fullPoiList = listOf<PoIModel>()
 //Mutable list to search PoIs
