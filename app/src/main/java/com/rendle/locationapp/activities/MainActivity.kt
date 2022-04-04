@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         //Handles clicks on nav drawer icons
         b.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.item1 -> Toast.makeText(applicationContext, "Item 1", Toast.LENGTH_LONG).show()
+                R.id.nav_item_map -> startActivity(Intent(this, MapActivity::class.java))
                 R.id.item_sign_out -> {
                     auth.signOut()
                     startActivity(loginIntent)

@@ -25,5 +25,7 @@
     <string name="text_reset_password">Reset Password</string>
     <string name="return_to_login">Return to Login Page</string>
     <string name="nav_bar_sign_out">Sign Out</string>
+    <string name="nav_menu_main_item">PoI List</string>
+    <string name="nav_menu_map_item">Map</string>
 
 </resources>
