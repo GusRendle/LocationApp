@@ -4,7 +4,7 @@
     <dimen name="main_content_padding">16dp</dimen>
     <dimen name="edit_text_text_size">16sp</dimen>
     <dimen name="add_activity_til_marginTop">5dp</dimen>
-    <dimen name="add_location_image_size">200dp</dimen>
+    <dimen name="add_location_image_size">100dp</dimen>
     <dimen name="add_location_save_btn_paddingTopBottom">8dp</dimen>
     <dimen name="btn_text_size">18sp</dimen>
     <dimen name="cv_item_location_marginStartEnd">8dp</dimen>
