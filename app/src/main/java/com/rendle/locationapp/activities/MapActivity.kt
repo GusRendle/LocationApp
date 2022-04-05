@@ -1,18 +1,24 @@
 package com.rendle.locationapp.activities
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.rendle.locationapp.R
+import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityMapBinding
+import com.rendle.locationapp.models.PoIModel
 
 //Uses a Data Binding (b) to refer to objects by their XML IDs
 private lateinit var b: ActivityMapBinding
@@ -20,8 +26,11 @@ private lateinit var b: ActivityMapBinding
 private lateinit var toggle: ActionBarDrawerToggle
 //The map data and view
 private lateinit var mMap: GoogleMap
-
+//This app's Firebase Authentication
 private lateinit var auth: FirebaseAuth
+//This app's Firebase Database & Database ref
+private lateinit var firebaseDb: FirebaseDatabase
+private lateinit var dbRef: DatabaseReference
 
 class MapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,16 +80,38 @@ class MapActivity : AppCompatActivity() {
             finish()
         }
 
+        //Links Firebase db to the db's URL
+        firebaseDb = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/")
+        dbRef = firebaseDb.reference
+        //Reference to the PoI sub-section of the db
+        val poiRef: DatabaseReference = dbRef.child("POIs")
+
         //Gets the id of the map fragment
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         //Acquires the GoogleMap object
         mapFragment.getMapAsync { mMap ->
-            // Add a marker in Sydney and move the camera
-            val sydney = LatLng(-34.0, 151.0)
-            mMap.addMarker(MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            //Runs at start and whenever database info changes
+            poiRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        //Wipe previous data
+                        mMap.clear()
+                        for (poiSnapshot in dataSnapshot.children) {
+                            //Lat and lng are not stored as a LatLng in the Firebase db
+                            val lat = poiSnapshot.child("location/latitude/").value.toString().toDouble()
+                            val lng = poiSnapshot.child("location/longitude/").value.toString().toDouble()
+                            //Add poi to map
+                            mMap.addMarker(MarkerOptions()
+                                .position(LatLng(lat, lng))
+                                .title(poiSnapshot.child("name").value as String?))!!.tag = poiSnapshot.key
+                        }
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    // Failed to read value
+                    Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                }
+            })
         }
     }
 
