@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -32,8 +33,7 @@ private var tempPoiList = mutableListOf<PoIModel>()
 private lateinit var rvAdapter: LocationAdapter
 //This app's Firebase Authentication
 private lateinit var auth: FirebaseAuth
-//This app's Firebase Database & Database ref
-private lateinit var firebaseDb: FirebaseDatabase
+//This app's Firebase Database ref
 private lateinit var dbRef: DatabaseReference
 
 class MainActivity : AppCompatActivity() {
@@ -90,8 +90,17 @@ class MainActivity : AppCompatActivity() {
         rvLocations.layoutManager = LinearLayoutManager(this@MainActivity)
 
         //Links Firebase db to the db's URL
-        firebaseDb = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/")
-        dbRef = firebaseDb.reference
+        dbRef = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        //Goes to the child with the user's uid in the admins sub catagory
+        dbRef.child("Admins").child(auth.currentUser!!.uid).get().addOnSuccessListener {
+            //If the value exists, user is an admin
+            if (it.value != null) {
+                b.fabAddLocation.visibility = View.VISIBLE
+            }
+        }.addOnFailureListener{
+            Log.e("firebase", "User is not an Admin", it)
+        }
+
         //Reference to the PoI sub-section of the db
         val poiRef: DatabaseReference = dbRef.child("POIs")
         //Runs at start and whenever database info changes
