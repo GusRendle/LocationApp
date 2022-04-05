@@ -1,15 +1,18 @@
 package com.rendle.locationapp.activities
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.rendle.locationapp.R
 import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityMainBinding
@@ -22,13 +25,16 @@ private lateinit var b: ActivityMainBinding
 //Refers to nav drawer toggle in the activity's action bar
 private lateinit var toggle: ActionBarDrawerToggle
 //List of all PoIs
-private var fullPoiList = listOf<PoIModel>()
+private var fullPoiList = mutableListOf<PoIModel>()
 //Mutable list to search PoIs
 private var tempPoiList = mutableListOf<PoIModel>()
 //RecyclerView adapter
 private lateinit var rvAdapter: LocationAdapter
-
+//This app's Firebase Authentication
 private lateinit var auth: FirebaseAuth
+//This app's Firebase Database & Database ref
+private lateinit var firebaseDb: FirebaseDatabase
+private lateinit var dbRef: DatabaseReference
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,20 +84,49 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        //Generates 20 PoIs
-        fullPoiList = PoIModel.createLocationList2()
-        tempPoiList.addAll(fullPoiList)
-
-        //Initialises adapter with new list
-        rvAdapter = LocationAdapter(fullPoiList)
-        //Gets Recycler view from XML
+        //Gets recycler view from XML
         val rvLocations = b.rvLocationsList
-        //Sends initialised adapter to rv
-        rvLocations.adapter = rvAdapter
         //Sets the RecyclerView's layoutManager to the created layout
-        rvLocations.layoutManager = LinearLayoutManager(this)
+        rvLocations.layoutManager = LinearLayoutManager(this@MainActivity)
 
+        //Links Firebase db to the db's URL
+        firebaseDb = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/")
+        dbRef = firebaseDb.reference
+        //Reference to the PoI sub-section of the db
+        val poiRef: DatabaseReference = dbRef.child("POIs")
+        //Runs at start and whenever database info changes
+        poiRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    //Wipe previous data
+                    fullPoiList.clear()
+                    for (poiSnapshot in dataSnapshot.children) {
+                        //Lat and lng are not stored as a LatLng in the Firebase db
+                        val lat = poiSnapshot.child("location/latitude/").value.toString().toDouble()
+                        val lng = poiSnapshot.child("location/longitude/").value.toString().toDouble()
+                        //Create a new PoIModel using db info
+                        val poi = PoIModel(poiSnapshot.child("name").value as String?, LatLng(lat, lng),poiSnapshot.child("description:").value as String?)
+                        //Add poi to poi list
+                        fullPoiList.add(poi)
+                    }
+                    //Initialises adapter with new list
+                    rvAdapter = LocationAdapter(fullPoiList)
+                    //Sends initialised adapter to recycler view
+                    rvLocations.adapter = rvAdapter
 
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
+
+        //In case Firebase database fails, load empty list into rv
+        rvAdapter = LocationAdapter(fullPoiList)
+        //fullPoiList = PoIModel.createLocationList2()
+        tempPoiList.addAll(fullPoiList)
 
         //Open AddLocationActivity when fab is pressed
         b.fabAddLocation.setOnClickListener {
@@ -130,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 if (searchText.isNotEmpty()) {
                     fullPoiList.forEach {
                         //Return items matching entered text
-                        if (it.name.lowercase(Locale.getDefault()).contains(searchText)) {
+                        if (it.name!!.lowercase(Locale.getDefault()).contains(searchText)) {
                             tempPoiList.add(it)
                         }
                     }
