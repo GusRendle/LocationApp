@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -81,16 +82,30 @@ class MapActivity : AppCompatActivity() {
         }
 
         //Links Firebase db to the db's URL
-        firebaseDb = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/")
-        dbRef = firebaseDb.reference
-        //Reference to the PoI sub-section of the db
-        val poiRef: DatabaseReference = dbRef.child("POIs")
+        dbRef = FirebaseDatabase.getInstance("https://locationapp-3c40b-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        //Goes to the child with the user's uid in the admins sub category
+        dbRef.child("Admins").child(auth.currentUser!!.uid).get().addOnSuccessListener {
+            //If the value exists, user is an admin
+            if (it.value != null) {
+                b.fabAddLocation.visibility = View.VISIBLE
+            }
+        }.addOnFailureListener{
+            Log.e("firebase", "User is not an Admin", it)
+        }
+
+        //Open AddLocationActivity when fab is pressed
+        b.fabAddLocation.setOnClickListener {
+            val intent = Intent(this, AddLocationActivity::class.java)
+            startActivity(intent)
+        }
+
 
         //Gets the id of the map fragment
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         //Acquires the GoogleMap object
         mapFragment.getMapAsync { mMap ->
             //Runs at start and whenever database info changes
+            val poiRef: DatabaseReference = dbRef.child("POIs")
             poiRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
