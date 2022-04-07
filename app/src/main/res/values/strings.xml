@@ -28,5 +28,6 @@
     <string name="nav_menu_main_item">PoI List</string>
     <string name="nav_menu_map_item">Map</string>
     <string name="location_pin_content_description">Location Pin</string>
+    <string name="toggle_favourites_content_description">Toggle Favourites</string>
 
 </resources>

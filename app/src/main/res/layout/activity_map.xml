@@ -29,7 +29,8 @@
                     android:src="@drawable/ic_fav_24"
                     android:layout_gravity="end"
                     android:padding="@dimen/ic_fav_padding"
-                    android:layout_marginEnd="11dp"/>
+                    android:layout_marginEnd="11dp"
+                    android:contentDescription="@string/toggle_favourites_content_description" />
 
             </androidx.appcompat.widget.Toolbar>
 

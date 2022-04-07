@@ -2,7 +2,7 @@ package com.rendle.locationapp.models
 
 import com.google.android.gms.maps.model.LatLng
 
-class PoIModel(val name: String? = null, val location: LatLng? = null, val description: String? = null) {
+class PoIModel(val uuid: String? = null, val name: String? = null, val location: LatLng? = null, val description: String? = null, var fav: Boolean? = false) {
     companion object {
         private var lastLocationId = 0
 
@@ -14,7 +14,7 @@ class PoIModel(val name: String? = null, val location: LatLng? = null, val descr
         fun createLocationList(numLocations: Int): ArrayList<PoIModel> {
             val locations = ArrayList<PoIModel>()
             for (i in 1..numLocations) {
-                locations.add(PoIModel("Name " + ++lastLocationId, null ,"Desc " + ++lastLocationId))
+                locations.add(PoIModel(null,"Name " + ++lastLocationId, null ,"Desc " + ++lastLocationId))
             }
             return locations
         }
