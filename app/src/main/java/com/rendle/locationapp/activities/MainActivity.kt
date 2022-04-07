@@ -135,8 +135,8 @@ class MainActivity : AppCompatActivity() {
                     fullPoiList.clear()
                     for (poiSnapshot in dataSnapshot.children) {
                         //Lat and lng are not stored as a LatLng in the Firebase db
-                        val lat = poiSnapshot.child("location/latitude/").value.toString().toDouble()
-                        val lng = poiSnapshot.child("location/longitude/").value.toString().toDouble()
+                        val lat = poiSnapshot.child("location/latitude/").value as Double
+                        val lng = poiSnapshot.child("location/longitude/").value as Double
                         //Create a new PoIModel using db info, fav set to false by default
                         val poi = PoIModel(poiSnapshot.key, poiSnapshot.child("name").value as String?, LatLng(lat, lng),poiSnapshot.child("description").value as String?, false)
                         //Add poi to poi list

@@ -35,8 +35,6 @@
         android:src="@drawable/ic_location_add_24"
         android:contentDescription="@string/location_pin_content_description" />
 
-
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_add_location"
         android:layout_width="match_parent"
