@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -116,14 +117,19 @@ class MapActivity : AppCompatActivity() {
             mapFragment.getMapAsync(::onMapReady)
         }
 
+        //If the map was left in fav mode, set the icon to reflect this
+        if (favToggle) {
+            b.btnFav.setImageResource(R.drawable.ic_fav_filled_24)
+        }
+
         //Reference to the Favourites sub-section of the db
         val favRef: DatabaseReference = dbRef.child("Favourites/${auth.currentUser!!.uid}")
         favRef.addValueEventListener(object : ValueEventListener {
             //Runs every time data is updated
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //Wipe previous data
+                favList.clear()
                 if (dataSnapshot.exists()) {
-                    //Wipe previous data
-                    favList.clear()
                     //For each favourite, adds the uuid to favList
                     for (favSnapshot in dataSnapshot.children) {
                         favList.add(favSnapshot.key!!)
@@ -150,6 +156,8 @@ class MapActivity : AppCompatActivity() {
     private fun onMapReady(mMap: GoogleMap) {
         //Reference to the PoI sub-section of the db
         val poiRef: DatabaseReference = dbRef.child("POIs")
+        //Sets the map to Worcester
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(52.18288929882368, -2.225693857359504), 13.5F))
         //Runs at start and whenever database info changes
         poiRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -163,13 +171,8 @@ class MapActivity : AppCompatActivity() {
                         val lng = poiSnapshot.child("location/longitude/").value as Double
                         //Normal poi id it's iin the favourites list, else null
                         val favItem = favList.find { item -> item == poiSnapshot.key}
-                        //If not favourites
-                        if (!favToggle) {
-                            mMap.addMarker(MarkerOptions()
-                                .position(LatLng(lat, lng))
-                                .title(poiSnapshot.child("name").value as String?))!!.tag = poiSnapshot.key
-                        //If map is set to show only favourites
-                        } else if (favToggle && favItem != null) {
+                        //If favourites not toggled, or are toggled and the poi matches
+                        if ((!favToggle) || (favToggle && favItem != null) ) {
                             mMap.addMarker(MarkerOptions()
                                 .position(LatLng(lat, lng))
                                 .title(poiSnapshot.child("name").value as String?))!!.tag = poiSnapshot.key
@@ -182,6 +185,14 @@ class MapActivity : AppCompatActivity() {
                 Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
             }
         })
-    }
 
+        //When marker clicked, got to PoiDetailActivity
+        mMap.setOnMarkerClickListener { marker ->
+            val intent = Intent(this, PoiDetailActivity::class.java)
+            //Pass the uuid of the marker clicked
+            intent.putExtra("uuid", marker.tag.toString())
+            startActivity(intent)
+            return@setOnMarkerClickListener true
+        }
+    }
 }

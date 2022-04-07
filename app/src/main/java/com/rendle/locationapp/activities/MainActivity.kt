@@ -120,6 +120,11 @@ class MainActivity : AppCompatActivity() {
             updateFavs()
         }
 
+        //If the list was left in fav mode, set the icon to reflect this
+        if (favToggle) {
+            b.btnFav.setImageResource(R.drawable.ic_fav_filled_24)
+        }
+
         //Reference to the PoI sub-section of the db
         val poiRef: DatabaseReference = dbRef.child("POIs")
         //Runs at start and whenever database info changes
@@ -181,12 +186,12 @@ class MainActivity : AppCompatActivity() {
                     //Sets the fav param to true in the poi list
                     poi!!.fav = true
                     favPoiList.add(poi)
-                    //Initialises adapter with new list
-                    rvAdapter = LocationAdapter(currentList())
-                    //Sends initialised adapter to recycler view
-                    rvLocations.adapter = rvAdapter
                 }
             }
+            //Initialises adapter with new list
+            rvAdapter = LocationAdapter(currentList())
+            //Sends initialised adapter to recycler view
+            rvLocations.adapter = rvAdapter
         }.addOnFailureListener{
             Log.e("firebase", "No favourites found", it)
         }

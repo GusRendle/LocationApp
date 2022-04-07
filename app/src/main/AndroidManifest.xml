@@ -15,8 +15,13 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
+            android:name=".activities.PoiDetailActivity"
+            android:label="REPLACE WITH POI NAME"
+            android:screenOrientation="fullSensor" />
+
+        <activity
             android:name=".activities.MapActivity"
-            android:label="Add Location"
+            android:label="PoI Map"
             android:screenOrientation="fullSensor" />
 
         <activity
@@ -29,11 +34,11 @@
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".activities.SignUpActivity"
-            android:label="Log In"
+            android:label="Sign Up"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".activities.ResetPasswordActivity"
-            android:label="Log In"
+            android:label="Reset Password"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".activities.MainActivity"

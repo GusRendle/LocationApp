@@ -1,12 +1,14 @@
 package com.rendle.locationapp.adapters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import com.rendle.locationapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.rendle.locationapp.activities.PoiDetailActivity
 import com.rendle.locationapp.models.PoIModel
 
 
@@ -17,8 +19,8 @@ class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationA
     //Provides access for the views in each list object
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Initializing variables in each view
-        val nameTextView: TextView = itemView.findViewById<TextView>(R.id.tvName)
-        val descriptionTextView: TextView = itemView.findViewById<TextView>(R.id.tvDescription)
+        val nameTextView: TextView = itemView.findViewById(R.id.tvName)
+        val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
     }
 
     // Constructor inflates the layout from XML, returns the holder
@@ -40,6 +42,13 @@ class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationA
         tvName.text = poi.name
         val tvDesc = viewHolder.descriptionTextView
         tvDesc.text = poi.description
+        //When item is clicked, go to PoiDetailActivity
+        viewHolder.itemView.setOnClickListener{
+            val intent = Intent(it.context, PoiDetailActivity::class.java)
+            //Pass the uuid of the item clicked
+            intent.putExtra("uuid", poi.uuid)
+            it.context.startActivity(intent)
+        }
     }
 
     // Returns the number of items in the list

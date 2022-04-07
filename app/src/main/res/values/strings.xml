@@ -11,6 +11,8 @@
     <string name="sign_up_text">Sign Up</string>
     <string name="open_text">Open</string>
     <string name="close_text">Close</string>
+    <string name="edit_text">Edit</string>
+    <string name="remove_text">Remove</string>
 
     <string name="add_location_tooltip">Add a Location</string>
     <string name="description_text">Description</string>
@@ -29,5 +31,8 @@
     <string name="nav_menu_map_item">Map</string>
     <string name="location_pin_content_description">Location Pin</string>
     <string name="toggle_favourites_content_description">Toggle Favourites</string>
+    <string name="image_downloading">Image downloading…</string>
+    <string name="image_downloading_failed">Image failed to load.</string>
+    <string name="image_of_the_poi_content_description">Image of the POI</string>
 
 </resources>
