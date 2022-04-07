@@ -2,12 +2,16 @@ package com.rendle.locationapp.adapters
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import com.rendle.locationapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.google.firebase.storage.FirebaseStorage
 import com.rendle.locationapp.activities.PoiDetailActivity
 import com.rendle.locationapp.models.PoIModel
 
@@ -19,8 +23,9 @@ class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationA
     //Provides access for the views in each list object
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Initializing variables in each view
-        val nameTextView: TextView = itemView.findViewById(R.id.tvName)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
+        val tvName: TextView = itemView.findViewById(R.id.tvName)
+        val tvDesc: TextView = itemView.findViewById(R.id.tvDescription)
+        val ivPoi: ImageView = itemView.findViewById(R.id.iv_location_image)
     }
 
     // Constructor inflates the layout from XML, returns the holder
@@ -38,10 +43,21 @@ class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationA
         // Get the current poi based on position
         val poi: PoIModel = poiList[position]
         // Set item views based PoI data
-        val tvName = viewHolder.nameTextView
-        tvName.text = poi.name
-        val tvDesc = viewHolder.descriptionTextView
-        tvDesc.text = poi.description
+        viewHolder.tvName.text = poi.name
+        viewHolder.tvDesc.text = poi.description
+
+        //Firebase Storage location
+        val storageRef = FirebaseStorage.getInstance("gs://locationapp-3c40b.appspot.com").reference
+        //The location of this poi's image
+        val poiImageRef = storageRef.child("images/${poi.uuid}/main.jpg")
+        //Gets image URL from firebase storage
+        poiImageRef.downloadUrl.addOnSuccessListener {
+            //Uses the coil library to load the image from the URL
+            viewHolder.ivPoi.load(it)
+        }.addOnFailureListener {
+            Log.e("firebase", "POI Image not found", it)
+        }
+
         //When item is clicked, go to PoiDetailActivity
         viewHolder.itemView.setOnClickListener{
             val intent = Intent(it.context, PoiDetailActivity::class.java)
