@@ -64,7 +64,8 @@ class AddLocationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Drag the marker to your location", Toast.LENGTH_LONG).show()
             } else {
                 val uuid = UUID.randomUUID().toString()
-                val poi = PoIModel(name, currentLocation,desc)
+                //Firebase has no need for uuid or fav value, so they are set to null
+                val poi = PoIModel(null, name, currentLocation, desc, null)
                 dbRef.child("POIs").child(uuid).setValue(poi)
                 onBackPressed()
             }
