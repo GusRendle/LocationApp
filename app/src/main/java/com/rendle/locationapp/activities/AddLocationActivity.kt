@@ -1,10 +1,16 @@
 package com.rendle.locationapp.activities
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import coil.load
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
@@ -12,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.rendle.locationapp.R
 import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityAddLocationBinding
@@ -23,6 +30,8 @@ private lateinit var b: ActivityAddLocationBinding
 
 private lateinit var firebaseDb: FirebaseDatabase
 private lateinit var dbRef: DatabaseReference
+private lateinit var storageRef: StorageReference
+private lateinit var poiImageUri: Uri
 //Current location on map
 var currentLocation: LatLng? = null
 //If this Activity is in edit mode, this is the uuid of the poi
@@ -65,13 +74,14 @@ class AddLocationActivity : AppCompatActivity() {
             }
 
             //Firebase Storage location
-            val storageRef = FirebaseStorage.getInstance("gs://locationapp-3c40b.appspot.com").reference
+            storageRef = FirebaseStorage.getInstance("gs://locationapp-3c40b.appspot.com").reference
             //The location of this poi's image
-            val poiImageRef = storageRef.child("images/${editUuid}/main.jpg")
+            val poiImageRef = storageRef.child("images/${editUuid}")
             //Gets image URL from firebase storage
             poiImageRef.downloadUrl.addOnSuccessListener {
                 //Uses the coil library to load the image from the URL
                 b.ivAddImage.load(it)
+                poiImageUri = it
             }.addOnFailureListener {
                 Log.e("firebase", "POI Image not found", it)
             }
@@ -94,6 +104,26 @@ class AddLocationActivity : AppCompatActivity() {
             }
         }
 
+        //Handles the launching of the get image intent
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            //If image was received correctly
+            if (result.resultCode == Activity.RESULT_OK) {
+                //Get the image's Uri
+                poiImageUri = result.data!!.data!!
+                //Show it in the imageView
+                b.ivAddImage.setImageURI(poiImageUri)
+            }
+        }
+
+        b.tvAddImage.setOnClickListener {
+            //Create a new intent to get the image
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            //Launch this intent
+            resultLauncher.launch(intent)
+        }
+
         b.btnSave.setOnClickListener {
             //Get email and password strings
             val name: String = b.etName.text.toString()
@@ -104,15 +134,26 @@ class AddLocationActivity : AppCompatActivity() {
             } else if (currentLocation == null) {
                 Toast.makeText(this, "Drag the marker to your location", Toast.LENGTH_LONG).show()
             } else {
+
+
+
                 //Firebase has no need for uuid or fav value, so they are set to null
                 val poi = PoIModel(null, name, currentLocation, desc, null)
 
                 if (editUuid != null) {
                     dbRef.child("POIs").child(editUuid!!).setValue(poi)
-                    onBackPressed()
                 } else {
                     val uuid = UUID.randomUUID().toString()
                     dbRef.child("POIs").child(uuid).setValue(poi)
+                }
+
+                //Set the reference to the image
+                val imagePOIref: StorageReference = storageRef.child("images/${editUuid}")
+                Toast.makeText(this, "Image uploading", Toast.LENGTH_LONG).show()
+                //Upload image
+                imagePOIref.putFile(poiImageUri).addOnFailureListener {
+                    Toast.makeText(this, "Failed to upload", Toast.LENGTH_LONG).show()
+                }.addOnSuccessListener {
                     onBackPressed()
                 }
             }

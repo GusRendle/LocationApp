@@ -49,7 +49,7 @@ class LocationAdapter (poiList: List<PoIModel>) : RecyclerView.Adapter<LocationA
         //Firebase Storage location
         val storageRef = FirebaseStorage.getInstance("gs://locationapp-3c40b.appspot.com").reference
         //The location of this poi's image
-        val poiImageRef = storageRef.child("images/${poi.uuid}/main.jpg")
+        val poiImageRef = storageRef.child("images/${poi.uuid}")
         //Gets image URL from firebase storage
         poiImageRef.downloadUrl.addOnSuccessListener {
             //Uses the coil library to load the image from the URL

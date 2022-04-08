@@ -244,4 +244,9 @@ class MainActivity : AppCompatActivity() {
         })
         return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onResume() {
+        super.onResume()
+        updateFavs()
+    }
 }

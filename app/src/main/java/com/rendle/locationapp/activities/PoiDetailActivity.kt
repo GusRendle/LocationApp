@@ -63,9 +63,9 @@ class PoiDetailActivity : AppCompatActivity() {
 
         //Goes to the child with the user's uid in the favourites sub category
         auth = FirebaseAuth.getInstance()
-        favRef = dbRef.child("Favourites")
+        favRef = dbRef.child("Favourites").child(auth.currentUser!!.uid).child(targetUUID)
 
-        favRef.child(auth.currentUser!!.uid).child(targetUUID).get().addOnSuccessListener {
+        favRef.get().addOnSuccessListener {
             //If the value exists, poi is a favourite
             isFav = if (it.value != null) {
                 b.btnFav.setImageResource(R.drawable.ic_fav_filled_24)
@@ -132,7 +132,7 @@ class PoiDetailActivity : AppCompatActivity() {
                 b.tvName.text = poiSnapshot.child("name").value as String
                 b.tvDescription.text = poiSnapshot.child("description").value as String
                 //The location of this poi's image
-                val poiImageRef = storageRef.child("images/$targetUUID/main.jpg")
+                val poiImageRef = storageRef.child("images/$targetUUID")
                 //Gets image URL from firebase storage
                 poiImageRef.downloadUrl.addOnSuccessListener {
                     //Uses the coil library to load the image from the URL
