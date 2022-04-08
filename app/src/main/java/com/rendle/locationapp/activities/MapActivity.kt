@@ -195,4 +195,12 @@ class MapActivity : AppCompatActivity() {
             return@setOnMarkerClickListener true
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        //Gets the id of the map fragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        //Acquires the GoogleMap object from onMapReady
+        mapFragment.getMapAsync(::onMapReady)
+    }
 }
