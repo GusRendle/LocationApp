@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:background="@color/colorPrimary">
+    android:layout_height="140dp"
+    android:background="@drawable/clear_sky">
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="In Worcester,"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_temp"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="it is currently 5C,"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_weather"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_weather"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="with overcast clouds."
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
@@ -19,6 +21,8 @@ import com.rendle.locationapp.R
 import com.rendle.locationapp.adapters.LocationAdapter
 import com.rendle.locationapp.databinding.ActivityMainBinding
 import com.rendle.locationapp.models.PoIModel
+import org.json.JSONObject
+import java.net.URL
 import java.util.*
 
 
@@ -161,6 +165,35 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddLocationActivity::class.java)
             startActivity(intent)
         }
+
+        //Starts an Asynchronous thread to get and update the weather
+        Thread {
+            val response:String?
+            //URL for the weather API
+            response = URL("https://api.openweathermap.org/data/2.5/weather?lat=52.1&lon=-2.2&appid=d6f716616a77bbef0be8f6d850fe47b5&units=metric").readText(Charsets.UTF_8)
+            val jsonObj = JSONObject(response)
+            val main = jsonObj.getJSONObject("main")
+            val clouds = jsonObj.getJSONObject("clouds")
+            val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
+            val temp = main.getString("temp")+"°C"
+            val cloudCoverage = clouds.getString("all")
+            val weatherDescription = weather.getString("description")
+            runOnUiThread {
+                //Gets layout for the header
+                val headerLayout: View = b.navView.getHeaderView(0)
+                val tvTemp = headerLayout.findViewById<TextView>(R.id.tv_temp)
+                val tvWeather = headerLayout.findViewById<TextView>(R.id.tv_weather)
+                val navHeader = headerLayout.findViewById<ConstraintLayout>(R.id.nav_header)
+                //Adjust background depending on weather
+                if (cloudCoverage.toInt() > 30) {
+                    navHeader.setBackgroundResource(R.drawable.clouds)
+                }
+                //Update values
+                tvTemp.text = "it is currently ${temp},"
+                tvWeather.text = "with ${weatherDescription}."
+            }
+        }.start()
+
     }
 
     //Returns either the full list, or the filtered fav list
