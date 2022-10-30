@@ -6,9 +6,9 @@ An app to display the historical sites of Worcester. Coded in Kotlin.
 
 ## Screenshots from the app
 <p align="middle">
-  <img src="/screenshots/login.jpg" alt="drawing" width="180"/>
-  <img src="/screenshots/map.jpg" alt="drawing" width="180"/>
-  <img src="/screenshots/poiDetail.jpg" alt="drawing" width="180"/>
-  <img src="/screenshots/poiList.jpg" alt="drawing" width="180"/>
-  <img src="/screenshots/sidebar.jpg" alt="drawing" width="180"/>
+  <img src="/screenshots/login.jpg" alt="drawing" width="220"/>
+  <img src="/screenshots/map.jpg" alt="drawing" width="220"/>
+  <img src="/screenshots/poiDetail.jpg" alt="drawing" width="220"/>
+  <img src="/screenshots/poiList.jpg" alt="drawing" width="220"/>
+  <img src="/screenshots/sidebar.jpg" alt="drawing" width="220"/>
 </p>
